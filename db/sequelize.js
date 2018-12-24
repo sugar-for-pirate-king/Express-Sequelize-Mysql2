@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const CustomerModel = require('../model/customer')
+const AccountModel = require('../model/account')
 
 const sequelize = new Sequelize('payment', 'root', null, {
   host: 'localhost',
@@ -13,7 +14,11 @@ const sequelize = new Sequelize('payment', 'root', null, {
 })
 
 const Customer = CustomerModel(sequelize, Sequelize)
+const Account = AccountModel(sequelize, Sequelize)
+Account.belongsTo(Customer, {foreignKey: 'customer_number', targetKey:'customerNumber'});
+
 
 module.exports = {
-  Customer
+  Customer,
+  Account
 }

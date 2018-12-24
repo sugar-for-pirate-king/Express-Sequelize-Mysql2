@@ -19,4 +19,4 @@ var accountRoutes = require('./routes/account_routes');
 accountRoutes(app);
 
 app.listen(port);
-logger.info("Learn Node JS With Reza, RESTful API server started on: " + port);
+logger.debug("Learn Node JS With Reza, RESTful API server started on: " + port);
