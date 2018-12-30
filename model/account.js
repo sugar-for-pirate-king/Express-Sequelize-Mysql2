@@ -1,3 +1,4 @@
+
 module.exports = (sequelize, type) =>{
     return sequelize.define('account',{
         accountNumber: {
@@ -14,13 +15,14 @@ module.exports = (sequelize, type) =>{
             field:'balance',
             type: type.DOUBLE
         },
-        customer_id: {
+        customerNumber: {
+            field : 'customer_id',
             type: type.INTEGER,
             onDelete: 'CASCADE',
             
             references:{
                 model: 'customer',
-                key: 'customer_id'
+                key: 'customerNumber'
             }
         }
     }, {

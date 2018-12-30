@@ -1,11 +1,11 @@
 'use strict'
 
 module.exports = function(app) {
-    var controller = require('../controller/account_controller');
+    var controller = require('../controller/accountDaoImpl');
 
-    app.route('/accounts').get(controller.accounts);
-    app.route('/account/:id').get(controller.getAccountById);
-    app.route('/account').post(controller.insertAccount);
-    app.route('/account').put(controller.updateAccount);
-    app.route('/account/:id').delete(controller.Del);
+    app.route('/account/list').get(controller.accounts);
+    app.route('/account/:id').get(controller.getById);
+    app.route('/account').post(controller.insert);
+    app.route('/account').put(controller.update);
+    app.route('/account/:id').delete(controller.del);
 };

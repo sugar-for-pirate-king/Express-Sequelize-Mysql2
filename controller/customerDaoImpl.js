@@ -9,13 +9,13 @@ exports.customers = function(req, res) {
             logger.error('error while select: '+error);
             response.err(error, res);
         } else{
-            response.ok(rows, res)
+            return response.ok(rows, res);
         }
     });
 };
 
 exports.getCustomerById = function(req, res) {
-    customerDaoSequelize.getById(req.params['id'], function(err, data){
+    customerDaoSequelize.getById(req.params['customerNumber'], function(err, data){
         if(err){
             logger.error('error call getById : '+err);
             response.err(err, res);
@@ -55,7 +55,7 @@ exports.insertCustomer= function(req, res) {
             logger.error('error call insert : '+err);
             response.err(err, res);
         } 
-        response.ok('data inserted with id '+data.customerNumber, res);
+        response.ok('data inserted with id '+data, res);
     });
 };
 

@@ -38,8 +38,8 @@ exports.updateCustomer = function(req, res){
                     response.err(err,res);
                 }
                 response.ok('update data : ' + data.message, res);
-            });
-        };
+            })
+        }
     });
 };
 

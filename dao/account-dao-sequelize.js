@@ -12,8 +12,9 @@ exports.getById = function getById(id, callback) {
     })
 };
 
-exports.getAll = function getAll(callback) {
+exports.getAll = function getAll(whereClause, callback) {
     Account.findAll({
+        where: whereClause,
         include:[Customer]
     })
     .then((accounts) => {
@@ -26,15 +27,14 @@ exports.getAll = function getAll(callback) {
 };
 
 exports.insert = function insert(data, callback) {
-    account = data;
-    if(account.customer==null && account.customer_number==null){
+    let account = data;
+    if(account.customer==null && account.customerNumber==null){
         res.json('customer kosong');
     }else{
-        if(account.customer_number==null){
-            account.customer_number = account.customer.customerNumber;
+        if(account.customerNumber==null){
+            account.customerNumber = account.customer.customerNumber;
         }
     }
-
     Account.create(account)
     .then(account => {
         return callback(null, account);
@@ -46,23 +46,12 @@ exports.insert = function insert(data, callback) {
 };
 
 exports.update = function update(id, data, callback) {
-    account = data;
-    if(account.customer==null && account.customer_number==null){
-        res.json('customer kosong');
-    }else{
-        if(account.customer_number==null){
-            account.customer_number = account.customer.customerNumber;
-        }
-    }
-    
     Account.update(data, {
         where: { accountNumber: data.accountNumber },
         returning: true,
         plain: true
       })
-    .then(result => {
-        logger.info('result  update:');
-        logger.info(result);
+    .then(account => {
         return callback(null, data);
     })
     .catch((error) => {
@@ -76,7 +65,7 @@ exports.del = function del(id, callback) {
         where: { accountNumber: id }
       })
     .then(result => {
-        logger.info('result  update:');
+        logger.info('result  delete:');
         logger.info(result);
         return callback(null, id);
     })

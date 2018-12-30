@@ -4,7 +4,21 @@ var logger = require('../util/logging/winston-logger');
 var util = require('util');
 
 exports.accounts = function(req, res) {
-    accountDao.getAll(function (error, rows){
+    let whereClause = {};
+    if (req.query.accountNumber){
+        whereClause.accountNumber = req.query.accountNumber;
+    }
+    if (req.query.openDate){
+        whereClause.openDate = req.query.openDate;
+    }
+    if (req.query.balance){
+        whereClause.balance =  req.query.balance;
+    }
+    if (req.query.customer){
+        whereClause.customer_id = req.query.customer;
+    }
+
+    accountDao.getAll(whereClause, function (error, rows){
         if(error){
             logger.error('error while select: '+error);
             response.err(error, res);
@@ -19,43 +33,43 @@ exports.getById = function(req, res) {
         if(err){
             logger.error('error call getById : '+err);
             response.err(err, res);
-        } 
+        }else if(data==null){
+            response.datanotfound('Data not found : ', res);
+        }else{ 
         response.ok(data, res);
+        }
     });
 
 };
 
 exports.update = function(req, res) {
-    logger.info('request for update :');
-    logger.debug(req.body);
-    accountDao.getById(req.body.accountNumber, function(err, data){//check account exists
+    const body =  req.body;
+    accountDao.getById(body.accountNumber, function(err, data){//check account exists
         if(err){
             logger.error('error call getById : '+err);
             response.err(err, res);
         } else if(data==null){
-            response.datanotfound('account not found', res);
+            response.datanotfound('Data not found !!', res);
         }else{
             //if exists, then continue update
-            accountDao.update(req.body.accountNumber, req.body, function(err, data){
+            accountDao.update(body.accountNumber, body, function(err, data){
                 if(err){
                     logger.error('error call update : '+err);
-                    response.err(error, res);
+                    response.err(err, res);
                 } 
-                response.ok('updated data : '+ data.accountNumber, res);
+                response.ok('updated Successfully : '+ data.accountNumber, res);
             });
         }
     });
 };
 
-exports.insert= function(req, res) {
-    logger.info('request for insert :');
-    logger.debug(req.body);
+exports.insert = function(req, res) {
     accountDao.insert(req.body, function(err, data){
         if(err){
             logger.error('error call insert : '+err);
             response.err(err, res);
         } 
-        response.ok('data inserted with id '+data.accountNumber, res);
+        response.ok(data, res);
     });
 };
 
@@ -74,7 +88,7 @@ exports.del = function(req, res) {
                     logger.error('error call delete : '+err);
                     response.err(error, res);
                 } 
-                response.ok('customer deleted with id : '+data, res);
+                response.ok('Delete Id : ' +data + ' success', res);
             });
         }
     });

@@ -29,7 +29,7 @@ exports.insertAccount = function(req, res){
             console.log('error call insert : ' + err);
             response.err(err, res);
         }else{
-            response.ok('Data insert with Id : ' +data.insertId, res);
+            response.ok('Data insert with Id : ' +data.accountNumber, res);
         }
     });
 };
